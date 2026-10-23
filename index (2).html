@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Central Idea Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ocean:#0b4f6c; --sea:#0e7c9b; --aqua:#2ec4b6; --sand:#fdf3dc; --sand2:#f6e3b4;
+  --sun:#ffb703; --coral:#fb6f5f; --ink:#1b2a33; --muted:#53636d; --card:#ffffff;
+  --good:#23894d; --goodbg:#e3f6ea; --bad:#c9363b; --badbg:#fde8e8; --line:#e6dcc6; --hl:#fff2b3;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Nunito,system-ui,-apple-system,sans-serif;color:var(--ink);font-size:18px;line-height:1.6;
+  background:linear-gradient(180deg,#bfe9f2 0%,#e6f7fa 35%,var(--sand) 100%);min-height:100vh;background-attachment:fixed}
+button{font:inherit;cursor:pointer}
+header{background:var(--ocean);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand .logo{font-size:1.9rem;line-height:1}
+.brand h1{font-family:'Baloo 2',sans-serif;font-size:1.3rem;margin:0;line-height:1.1}
+.chip{display:inline-block;background:var(--sun);color:#3b2a00;font-weight:800;font-size:.72rem;padding:2px 9px;border-radius:999px;margin-top:2px}
+.voicebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.85rem;font-weight:700}
+.seg{display:flex;background:rgba(255,255,255,.16);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:#fff;font-weight:800;padding:5px 11px;border-radius:999px;font-size:.85rem}
+.seg button.on{background:#fff;color:var(--ocean)}
+.stopbtn{border:0;background:var(--coral);color:#fff;font-weight:800;border-radius:999px;padding:6px 12px;font-size:.85rem;display:none}
+.stopbtn.show{display:inline-block}
+
+main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
+.card{background:var(--card);border-radius:22px;box-shadow:0 8px 24px rgba(11,79,108,.12);padding:24px;border:3px solid #fff}
+.center{max-width:720px;margin:0 auto}
+h2{font-family:'Baloo 2',sans-serif;color:var(--ocean);font-size:1.8rem;margin:0 0 8px;line-height:1.2}
+h3{font-family:'Baloo 2',sans-serif;color:var(--sea);margin:0 0 6px;font-size:1.25rem}
+.muted{color:var(--muted)}
+.big{border:0;border-radius:16px;padding:14px 24px;font-weight:800;font-size:1.1rem;background:var(--aqua);color:#06323a;box-shadow:0 5px 0 #1d9a8f;transition:transform .08s}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 #1d9a8f}
+.big.sun{background:var(--sun);box-shadow:0 5px 0 #d09000;color:#3b2a00}
+.big.coral{background:var(--coral);color:#fff;box-shadow:0 5px 0 #c94f41}
+.big:disabled{opacity:.45;cursor:not-allowed}
+.ghost{border:2px solid var(--sea);background:#fff;color:var(--sea);border-radius:12px;padding:8px 14px;font-weight:800;font-size:.95rem}
+.speak{border:0;background:#e2f4f8;color:var(--ocean);border-radius:999px;padding:6px 14px;font-weight:800;font-size:.9rem;display:inline-flex;align-items:center;gap:6px}
+.speak:hover{background:#cdebf2}
+.speak.sm{padding:3px 10px;font-size:.8rem}
+input[type=text]{font:inherit;font-size:1.15rem;padding:12px 14px;border-radius:14px;border:3px solid var(--line);width:100%;max-width:380px}
+input[type=text]:focus{outline:none;border-color:var(--aqua)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tip{background:#fff8e1;border-left:6px solid var(--sun);border-radius:12px;padding:12px 16px;margin:14px 0}
+.steps{padding-left:22px;margin:10px 0}
+.steps li{margin:6px 0}
+
+/* passage */
+.passage .ptitle{font-family:'Baloo 2',sans-serif;font-size:1.7rem;color:var(--ocean);margin:0;line-height:1.2}
+.passage .byline{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.passage h4{font-family:'Baloo 2',sans-serif;color:var(--sea);font-size:1.15rem;margin:18px 0 4px}
+.para{display:grid;grid-template-columns:34px 1fr;gap:8px;padding:8px 10px;border-radius:12px;transition:background .25s}
+.para .num{font-family:'Baloo 2',sans-serif;font-weight:800;color:#fff;background:var(--sea);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-top:3px}
+.para p{margin:0}
+.para .pbtn{margin-top:4px}
+.para.reading{background:var(--hl)}
+.para.flash{animation:flash 1.6s}
+@keyframes flash{0%,60%{background:#c8f1ec}100%{background:transparent}}
+
+/* quiz layout */
+.quizwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.ppanel{position:sticky;top:84px;max-height:calc(100vh - 104px);overflow:auto;padding:18px}
+.ppanel .tools{position:sticky;top:-18px;background:#fff;padding:6px 0 8px;z-index:2;display:flex;gap:8px;flex-wrap:wrap;border-bottom:2px dashed var(--line);margin-bottom:6px}
+.togglep{display:none}
+@media (max-width:860px){
+  .quizwrap{grid-template-columns:1fr}
+  .ppanel{position:fixed;inset:70px 10px 10px 10px;max-height:none;z-index:40;display:none}
+  .ppanel.open{display:block}
+  .togglep{display:inline-flex}
+  .closep{display:inline-flex!important}
+}
+.closep{display:none!important}
+
+/* beach progress */
+.beach{position:relative;height:54px;border-radius:14px;overflow:hidden;background:linear-gradient(90deg,var(--sand2) 0%,var(--sand2) 82%,#5cc8dc 82%,#2a9fbf 100%);margin-bottom:12px}
+.beach .wave{position:absolute;right:0;top:0;bottom:0;width:18%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.beach .turtle{position:absolute;top:50%;transform:translate(-50%,-50%) scaleX(-1);font-size:1.9rem;transition:left .6s ease}
+.dots{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center;color:var(--muted);padding:0}
+.dot.cur{border-color:var(--ocean);color:var(--ocean);box-shadow:0 0 0 3px #bfe9f2}
+.dot.right{background:var(--good);border-color:var(--good);color:#fff}
+.dot.wrong{background:var(--bad);border-color:var(--bad);color:#fff}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.qnum{font-family:'Baloo 2',sans-serif;font-weight:800;color:var(--ocean);font-size:1.15rem}
+.part{background:var(--coral);color:#fff;border-radius:8px;padding:1px 8px;font-size:.85rem;margin-left:6px}
+.score{font-weight:800;color:var(--good);background:var(--goodbg);border-radius:999px;padding:3px 12px;font-size:.9rem}
+.stem{font-size:1.15rem;font-weight:700;margin:8px 0}
+.quote{background:#f3fafc;border-left:5px solid var(--aqua);padding:8px 12px;border-radius:8px;font-style:italic;margin:8px 0}
+.choose{display:inline-block;background:#fff1ec;color:#a8372b;font-weight:800;border-radius:8px;padding:2px 10px;font-size:.9rem;margin-bottom:6px}
+.parta{background:#f6f1e4;border-radius:10px;padding:8px 12px;font-size:.92rem;margin-bottom:6px}
+.choices{display:flex;flex-direction:column;gap:9px;margin:10px 0 14px}
+.choice{display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:center;text-align:left;border:3px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;font-size:1.02rem;color:var(--ink);transition:border-color .15s,background .15s}
+.choice:hover:not(:disabled){border-color:var(--aqua)}
+.choice .let{width:32px;height:32px;border-radius:50%;background:#eef6f8;color:var(--ocean);font-weight:800;display:flex;align-items:center;justify-content:center}
+.choice.multi .let{border-radius:8px}
+.choice.sel{border-color:var(--sea);background:#e8f6fa}
+.choice.sel .let{background:var(--sea);color:#fff}
+.choice.isright{border-color:var(--good);background:var(--goodbg)}
+.choice.isright .let{background:var(--good);color:#fff}
+.choice.iswrong{border-color:var(--bad);background:var(--badbg)}
+.choice.iswrong .let{background:var(--bad);color:#fff}
+.choice:disabled{cursor:default}
+.fb{border-radius:14px;padding:12px 16px;margin:10px 0;font-weight:600}
+.fb.good{background:var(--goodbg);border:2px solid var(--good)}
+.fb.bad{background:var(--badbg);border:2px solid var(--bad)}
+.fb strong{font-family:'Baloo 2',sans-serif;font-size:1.15rem}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px}
+.pop{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-family:'Baloo 2',sans-serif;font-size:2.4rem;font-weight:800;color:var(--good);pointer-events:none;animation:pop 1.1s forwards;z-index:60;text-shadow:0 3px 0 #fff}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-110%) scale(1)}}
+
+/* results */
+.badge{font-size:4.5rem;line-height:1;margin:6px 0}
+.bigscore{font-family:'Baloo 2',sans-serif;font-size:3rem;color:var(--ocean);font-weight:800;line-height:1}
+.stars{font-size:1.6rem;letter-spacing:2px;margin:6px 0}
+.review{margin-top:16px;display:grid;gap:8px}
+.ritem{border-radius:12px;padding:8px 12px;font-size:.95rem;border:2px solid var(--line)}
+.ritem.r{border-color:var(--good);background:var(--goodbg)}
+.ritem.w{border-color:var(--bad);background:var(--badbg)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:70}
+footer{text-align:center;font-size:.8rem;color:var(--muted);padding:10px}
+footer button{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo" aria-hidden="true">🐢</span>
+    <div>
+      <h1>Central Idea &amp; Details Practice</h1>
+      <span class="chip">ELA.6.R.2.2 · Grade 6</span>
+    </div>
+  </div>
+  <div class="voicebar">
+    <span>🔊 Voice:</span>
+    <div class="seg" id="voiceSeg">
+      <button data-v="female" class="on">Female</button>
+      <button data-v="male">Male</button>
+      <button data-v="mixed">Mixed</button>
+    </div>
+    <div class="seg" id="rateSeg">
+      <button data-r="0.8">Slow</button>
+      <button data-r="0.95" class="on">Normal</button>
+    </div>
+    <button class="stopbtn" id="stopBtn" onclick="stopSpeech()">■ Stop</button>
+  </div>
+</header>
+<main id="app"></main>
+<footer>Practice for Florida B.E.S.T. Grade 6 Reading · <button onclick="teacherReset()">Teacher reset</button></footer>
+<canvas id="confetti"></canvas>
+
+<script>
+/* ===================== SETTINGS ===================== */
+const TEACHER_PIN = "1234";          // change this to your own PIN
+const STORE = "cidPractice_turtles_v1_";
+
+/* ===================== PASSAGE ===================== */
+const PASSAGE = {
+  title: "Lights Out for Hatchlings",
+  paras: [
+    {h:"A Night-Time Journey", t:"Just after midnight on a quiet Florida beach, the sand begins to move. A tiny flipper pokes through the surface, then a head, then another, and another. Within minutes, dozens of baby sea turtles, called hatchlings, are scrambling out of their nest. Each one is small enough to fit in the palm of your hand, and each one has the same urgent goal: reach the ocean. On many beaches today, however, that short trip has become far more dangerous than it should be."},
+    {t:"Florida is one of the most important places in the world for sea turtles to nest. Every year, loggerhead, green, and leatherback turtles dig tens of thousands of nests along the state's coastline. From about March through October, female turtles crawl out of the sea at night. Using their back flippers, they dig a deep hole, lay around 100 eggs, cover the nest with sand, and return to the water. About two months later, the hatchlings dig their way out, usually at night, when the sand is cooler and hungry predators have a harder time spotting them."},
+    {h:"Following the Light", t:"How does a hatchling that has never seen the ocean know which way to go? Scientists have discovered that hatchlings use light as their guide. On a natural beach, the sky over the ocean is the brightest direction because moonlight and starlight reflect off the water. Behind the beach, tall dunes and plants block light and make the land side darker. Hatchlings instinctively crawl toward the brightest, lowest horizon. For millions of years, this simple rule has led them straight to the sea."},
+    {h:"When Lights Lead the Wrong Way", t:"Today, however, many beaches are lined with homes, hotels, streetlights, and parking lots. Their bright lights can easily outshine the soft glow over the water. When hatchlings see these artificial lights, they may turn away from the ocean and crawl toward land instead. Scientists call this disorientation. Confused hatchlings have been found in roads, swimming pools, and parking lots. Many are run over by cars, eaten by crabs and birds, or dried out by the morning sun. Even hatchlings that finally reach the water may have wasted the energy they need for their long swim out to sea."},
+    {t:"Bright lights cause problems for adult turtles, too. Nesting females prefer dark, quiet beaches. When a beach is too bright, a female may crawl onto the sand, then turn around and return to the ocean without laying any eggs. This is called a false crawl. If it happens again and again, she may end up laying her eggs in a spot that is less safe for her young."},
+    {h:"A Bright Idea: Change the Lights", t:"Compared with many environmental problems, this one has a fairly simple solution: change the lights. Many Florida beach towns and counties have passed lighting rules for nesting season. Most of these rules follow three easy-to-remember ideas. Keep it low: lights should be placed close to the ground. Keep it shielded: lights should point down, so the bulb cannot be seen from the beach. Keep it long: lights should use long-wavelength colors, such as amber or red, which are less likely to confuse turtles. Indoor lights matter, too. People who live or stay near the beach are asked to close their blinds and curtains after dark."},
+    {h:"Beach Helpers", t:"Volunteers also play an important part. In many communities, trained volunteers walk the beach at sunrise during nesting season. They count new nests, mark them with stakes and bright tape, and look for tiny tracks heading the wrong way. When they find signs of disoriented hatchlings, they report the light that caused the problem so it can be fixed."},
+    {t:"Volunteers also teach beach visitors simple ways to help. They ask people to fill in holes they dig in the sand, knock down sandcastles before leaving, and carry beach chairs and toys off the beach at night, because these objects can trap or block hatchlings. They also remind visitors never to shine flashlights or phone lights near nests. Communities that have made these changes have reported far fewer disoriented hatchlings in the years that followed."},
+    {h:"Finding the Way Home", t:"Sea turtles have lived in Earth's oceans for more than 100 million years. They have survived ice ages and outlived the dinosaurs. Now, part of their survival depends on the choices people make after dark. Something as small as flipping a switch, closing a curtain, or turning off a phone light can help a tiny hatchling find its way home to the sea."}
+  ]
+};
+
+/* ===================== QUESTIONS =====================
+   a = correct index (or array for multi), n = number to choose (multi),
+   part/link = two-part questions, p = paragraph(s) to look back at, quote = quoted detail */
+const Q = [
+ {q:"Which statement best expresses the central idea of the whole passage?",
+  c:["Florida has more sea turtle nests than any other place in the world.",
+     "Artificial lights can confuse sea turtles, but people can protect them by changing how they use light near beaches.",
+     "Volunteers walk Florida beaches every morning to count and mark sea turtle nests.",
+     "Sea turtles have survived for millions of years because they always follow the light."],
+  a:1, ex:"The whole passage is about a problem (lights confuse turtles) and a solution (people change their lights). The other choices are single details or are not true."},
+ {q:"Which detail from the passage best supports the central idea?",
+  c:["\"Each one is small enough to fit in the palm of your hand.\"",
+     "\"Using their back flippers, they dig a deep hole.\"",
+     "\"When hatchlings see these artificial lights, they may turn away from the ocean and crawl toward land instead.\"",
+     "\"They have survived ice ages and outlived the dinosaurs.\""],
+  a:2, ex:"This detail shows exactly how lights harm hatchlings, which is a key part of the central idea. The other details are interesting but do not prove the main point."},
+ {q:"What is the central idea of paragraph 3?", p:[3],
+  c:["Hatchlings find the ocean by crawling toward the brightest, lowest horizon.",
+     "Dunes and plants are an important part of every beach.",
+     "Moonlight is brighter than starlight.",
+     "Scientists have studied sea turtles for millions of years."],
+  a:0, ex:"Paragraph 3 answers the question of how hatchlings know which way to go: they follow the brightest, lowest horizon, which is usually over the ocean."},
+ {q:"Which sentence from paragraph 3 best explains WHY the ocean side of a natural beach looks brighter?", p:[3],
+  c:["\"How does a hatchling that has never seen the ocean know which way to go?\"",
+     "\"Scientists have discovered that hatchlings use light as their guide.\"",
+     "\"On a natural beach, the sky over the ocean is the brightest direction because moonlight and starlight reflect off the water.\"",
+     "\"For millions of years, this simple rule has led them straight to the sea.\""],
+  a:2, ex:"The word \"because\" signals the reason: moonlight and starlight reflect off the water, making the ocean side brighter."},
+ {q:"How does paragraph 4 help develop the central idea of the passage?", p:[4],
+  c:["It explains how artificial lights can lead hatchlings into danger.",
+     "It describes how female turtles choose where to nest.",
+     "It lists the rules communities follow for beach lighting.",
+     "It shows that most hatchlings reach the ocean safely."],
+  a:0, ex:"Paragraph 4 describes the problem: lights from buildings pull hatchlings toward roads, pools, and parking lots, where they face danger."},
+ {q:"Why does the author include this detail in paragraph 4?", p:[4],
+  quote:"Even hatchlings that finally reach the water may have wasted the energy they need for their long swim out to sea.",
+  c:["To show that disorientation can harm hatchlings even when they survive the crawl",
+     "To explain exactly how far hatchlings swim",
+     "To prove that most hatchlings make it to the water",
+     "To describe what hatchlings eat in the ocean"],
+  a:0, ex:"The word \"even\" shows that hatchlings are still harmed after reaching the water, because they used up the energy they need."},
+ {q:"Which TWO details support the idea that artificial lights are dangerous for sea turtles?", n:2,
+  c:["Confused hatchlings have been found in roads, swimming pools, and parking lots.",
+     "Loggerhead, green, and leatherback turtles nest in Florida.",
+     "When a beach is too bright, a female may return to the ocean without laying any eggs.",
+     "Hatchlings usually dig out of the nest at night.",
+     "Sea turtles have lived in Earth's oceans for more than 100 million years."],
+  a:[0,2], ex:"Both details show harm caused by light: hatchlings end up in dangerous places, and females are scared away from nesting."},
+ {q:"What is the central idea of paragraph 5?", p:[5],
+  c:["Adult female turtles lay about 100 eggs at a time.",
+     "Bright lights can keep female turtles from nesting in safe places.",
+     "False crawls happen only on dark beaches.",
+     "Female turtles return to the same beach every year."],
+  a:1, ex:"Paragraph 5 explains that bright beaches cause false crawls, which can push females to lay eggs in less safe spots."},
+ {q:"What is the central idea of paragraph 6?", p:[6],
+  c:["Lighting rules help protect turtles by changing how and where lights shine.",
+     "Amber and red are the most popular colors for outdoor lights.",
+     "People who live near the beach should move away during nesting season.",
+     "Florida beach towns have too many lighting rules."],
+  a:0, ex:"Paragraph 6 presents the solution: rules that keep lights low, shielded, and long-wavelength, plus closing curtains."},
+ {q:"According to paragraph 6, which action follows the rule \"keep it shielded\"?", p:[6],
+  c:["Using a red or amber bulb",
+     "Placing a light close to the ground",
+     "Pointing a light downward so the bulb cannot be seen from the beach",
+     "Turning lights on only during the day"],
+  a:2, ex:"The passage says \"Keep it shielded: lights should point down, so the bulb cannot be seen from the beach.\" Red bulbs = keep it long. Close to the ground = keep it low."},
+ {part:"A", q:"Which statement best describes how paragraphs 7 and 8 contribute to the central idea?", p:[7,8],
+  c:["They show that people can take action to keep hatchlings safe.",
+     "They explain why sea turtles prefer dark beaches.",
+     "They suggest that volunteers are more important than lighting rules.",
+     "They describe the life cycle of a sea turtle."],
+  a:0, ex:"Paragraphs 7 and 8 describe volunteers and visitors taking action to protect nests and hatchlings."},
+ {part:"B", link:10, q:"Which detail best supports the answer to Part A?", p:[7],
+  c:["\"Nesting females prefer dark, quiet beaches.\"",
+     "\"When they find signs of disoriented hatchlings, they report the light that caused the problem so it can be fixed.\"",
+     "\"About two months later, the hatchlings dig their way out.\"",
+     "\"They have survived ice ages and outlived the dinosaurs.\""],
+  a:1, ex:"Reporting the light so it can be fixed is a clear example of people taking action to keep hatchlings safe."},
+ {q:"Which detail is LEAST important to include in a summary of the passage?",
+  c:["Bright lights can lead hatchlings away from the ocean.",
+     "Communities use lighting rules to protect sea turtles.",
+     "A hatchling is small enough to fit in the palm of your hand.",
+     "Hatchlings use light to find their way to the sea."],
+  a:2, ex:"The size of a hatchling is a small, interesting detail. It does not help explain the central idea, so it does not belong in a summary."},
+ {q:"Which is the best objective summary of the passage?",
+  c:["Sea turtle hatchlings are cute and amazing, and everyone should go to the beach to watch them hatch.",
+     "Hatchlings use the bright ocean horizon to find the sea, but lights from buildings can confuse them and lead them into danger. Bright lights can also stop females from nesting. To help, communities use turtle-friendly lighting rules, and volunteers protect nests and teach visitors.",
+     "Female turtles dig nests, lay about 100 eggs, and return to the ocean. About two months later, the babies hatch.",
+     "Volunteers are the only reason sea turtles are still alive, and hotels should be closed during nesting season."],
+  a:1, ex:"An objective summary tells the central idea and the most important details in your own words, with no opinions. The other choices include opinions or leave out the central idea."},
+ {q:"Which THREE ideas belong in a summary of the passage?", n:3,
+  c:["Hatchlings naturally crawl toward the brightest horizon, which is usually over the ocean.",
+     "Artificial lights can confuse hatchlings and lead them toward danger.",
+     "Volunteers mark nests with stakes and bright tape.",
+     "Many communities protect turtles with lights that are low, shielded, and long-wavelength.",
+     "Sea turtles outlived the dinosaurs.",
+     "Hotels are the worst part of the beach."],
+  a:[0,1,3], ex:"These three ideas tell how hatchlings find the sea, what the problem is, and how people solve it. The others are minor details or an opinion."},
+ {q:"Why does the author begin the passage with a description of hatchlings coming out of their nest?", p:[1],
+  c:["To grab the reader's attention and introduce the hatchlings' goal of reaching the ocean",
+     "To explain the lighting rules used in beach towns",
+     "To compare sea turtles with other ocean animals",
+     "To prove that hatchlings only come out at exactly midnight"],
+  a:0, ex:"The opening scene hooks the reader and sets up the problem: the trip to the ocean has become dangerous."},
+ {q:"Which central idea is developed in BOTH paragraph 4 and paragraph 5?", p:[4,5],
+  c:["Artificial lights can harm sea turtles at different stages of life.",
+     "Volunteers help hatchlings find the ocean.",
+     "Hatchlings follow the moon to find food.",
+     "Female turtles often lay their eggs in parking lots."],
+  a:0, ex:"Paragraph 4 shows lights harming hatchlings; paragraph 5 shows lights harming adult females. Both show harm at different life stages."},
+ {part:"A", q:"What is the central idea of paragraph 9?", p:[9],
+  c:["Sea turtles are ancient survivors, and people's small choices now help them continue to survive.",
+     "Dinosaurs and sea turtles were enemies long ago.",
+     "Sea turtles will survive no matter what people do.",
+     "People should never go to the beach at night."],
+  a:0, ex:"Paragraph 9 connects the turtles' long history to the idea that their future now depends partly on people's choices."},
+ {part:"B", link:17, q:"Which sentence from paragraph 9 best supports the answer to Part A?", p:[9],
+  c:["\"Sea turtles have lived in Earth's oceans for more than 100 million years.\"",
+     "\"Now, part of their survival depends on the choices people make after dark.\"",
+     "\"They have survived ice ages and outlived the dinosaurs.\"",
+     "\"Bright lights cause problems for adult turtles, too.\""],
+  a:1, ex:"This sentence connects survival to people's choices, which is the most important part of the paragraph's central idea. The sentence about adult turtles is not from paragraph 9."},
+ {q:"How does the author develop the central idea across the whole passage?",
+  c:["By describing a problem, explaining its causes and effects, and then presenting solutions",
+     "By telling the events of one turtle's entire life in order",
+     "By comparing two different kinds of sea turtles",
+     "By arguing that all beaches should be closed at night"],
+  a:0, ex:"The passage moves from how hatchlings find the sea, to the problem lights cause, to the solutions people use: a problem-and-solution structure."}
+];
+
+/* Shuffle answer choices once (fixed seed, same order for every student) so correct answers are spread across A-F */
+(function(){ let seed = 2026; const rnd = () => (seed = (seed*9301 + 49297) % 233280) / 233280;
+  Q.forEach(q => { const idx = q.c.map((_,j) => j);
+    for(let k = idx.length-1; k > 0; k--){ const r = Math.floor(rnd()*(k+1)); [idx[k],idx[r]] = [idx[r],idx[k]]; }
+    const oldA = Array.isArray(q.a) ? q.a : [q.a];
+    q.c = idx.map(j => q.c[j]);
+    const newA = oldA.map(o => idx.indexOf(o)).sort();
+    q.a = Array.isArray(q.a) ? newA : newA[0]; });
+})();
+
+/* ===================== STATE & STORAGE ===================== */
+let state = null;
+function fresh(name){ return {name, stage:"directions", idx:0, answers:{}, pending:{}, started:Date.now(), finished:null}; }
+function skey(n){ return STORE + n.trim().toLowerCase(); }
+function save(){ if(!state) return; try{ localStorage.setItem(skey(state.name), JSON.stringify(state)); localStorage.setItem(STORE+"last", state.name);}catch(e){} }
+function loadFor(n){ try{ const s = localStorage.getItem(skey(n)); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+function lastName(){ try{ return localStorage.getItem(STORE+"last") || ""; }catch(e){ return ""; } }
+
+/* ===================== SPEECH ===================== */
+let voiceMode = "female", rate = 0.95, flip = false, token = 0;
+const FEM = [/google us english/i,/samantha/i,/\bava\b/i,/allison/i,/susan/i,/aria/i,/jenny/i,/michelle/i,/zira/i,/nicky/i,/female/i];
+const MAL = [/aaron/i,/\bguy\b/i,/christopher/i,/\beric\b/i,/david/i,/\bmark\b/i,/\bevan\b/i,/\btom\b/i,/fred/i,/\balex\b/i,/\bmale\b/i];
+function usVoices(){ try{ return speechSynthesis.getVoices().filter(v => /^en[-_]US/i.test(v.lang)); }catch(e){ return []; } }
+function pick(list){ const vs = usVoices(); for(const re of list){ const v = vs.find(x => re.test(x.name)); if(v) return v; } return null; }
+function chooseVoice(){
+  let m = voiceMode;
+  if(m === "mixed"){ flip = !flip; m = flip ? "female" : "male"; }
+  const vs = usVoices();
+  if(m === "male") return pick(MAL) || vs.find(v => !FEM.some(r => r.test(v.name))) || pick(FEM) || vs[0] || null;
+  return pick(FEM) || vs[0] || null;
+}
+function cleanSpeech(t){
+  return String(t).replace(/ELA\.[A-Z0-9.]+/g,"").replace(/[“”"]/g,"").replace(/—/g,", ")
+    .replace(/\bA:\s/g,"").replace(/\s+/g," ").trim();
+}
+function chunk(t){ return (t.match(/[^.!?]+[.!?]+["')]*|[^.!?]+$/g) || [t]).map(s => s.trim()).filter(Boolean); }
+function setSpeaking(on){ document.getElementById("stopBtn").classList.toggle("show", on); }
+function clearHL(){ document.querySelectorAll(".para.reading").forEach(e => e.classList.remove("reading")); }
+function stopSpeech(){ token++; try{ speechSynthesis.cancel(); }catch(e){} setSpeaking(false); clearHL(); }
+/* items: [{text, el}] — el (optional) is highlighted while that item is read */
+function speak(items){
+  if(!("speechSynthesis" in window)){ alert("Read aloud is not available on this browser."); return; }
+  stopSpeech();
+  const my = ++token, voice = chooseVoice(), queue = [];
+  items.forEach(it => chunk(cleanSpeech(it.text)).forEach((c,j) => queue.push({c, el: j===0 ? (it.el||null) : undefined})));
+  let k = 0;
+  const next = () => {
+    if(my !== token) return;
+    if(k >= queue.length){ setSpeaking(false); clearHL(); return; }
+    const q = queue[k++];
+    const u = new SpeechSynthesisUtterance(q.c);
+    if(voice){ u.voice = voice; u.lang = voice.lang; } else u.lang = "en-US";
+    u.rate = rate;
+    u.onstart = () => { if(q.el !== undefined){ clearHL(); if(q.el){ q.el.classList.add("reading"); q.el.scrollIntoView({block:"nearest",behavior:"smooth"}); } } };
+    u.onend = next; u.onerror = next;
+    speechSynthesis.speak(u);
+  };
+  setSpeaking(true);
+  setTimeout(next, 80);
+}
+try{ speechSynthesis.onvoiceschanged = () => {}; speechSynthesis.getVoices(); }catch(e){}
+
+document.getElementById("voiceSeg").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  voiceMode = b.dataset.v; flip = false;
+  document.querySelectorAll("#voiceSeg button").forEach(x => x.classList.toggle("on", x === b));
+  try{ localStorage.setItem(STORE+"voice", voiceMode); }catch(e){}
+});
+document.getElementById("rateSeg").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  rate = parseFloat(b.dataset.r);
+  document.querySelectorAll("#rateSeg button").forEach(x => x.classList.toggle("on", x === b));
+});
+try{ const v = localStorage.getItem(STORE+"voice"); if(v){ voiceMode = v; document.querySelectorAll("#voiceSeg button").forEach(x => x.classList.toggle("on", x.dataset.v === v)); } }catch(e){}
+
+/* ===================== HELPERS ===================== */
+const app = document.getElementById("app");
+const L = "ABCDEF";
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function score(){ return Object.values(state.answers).filter(a => a.ok).length; }
+function answered(){ return Object.keys(state.answers).length; }
+function sameSet(a,b){ a=[...a].sort(); b=[...b].sort(); return a.length===b.length && a.every((x,i)=>x===b[i]); }
+function correctArr(q){ return Array.isArray(q.a) ? q.a : [q.a]; }
+function numLabel(i){ return "Question " + (i+1) + " of " + Q.length; }
+
+function passageHTML(){
+  let h = `<div class="passage"><p class="ptitle">${esc(PASSAGE.title)}</p><div class="byline">An informational article</div>`;
+  PASSAGE.paras.forEach((p,i) => {
+    if(p.h) h += `<h4>${esc(p.h)}</h4>`;
+    h += `<div class="para" id="para${i+1}"><span class="num">${i+1}</span><div><p>${esc(p.t)}</p>
+      <button class="speak sm pbtn" onclick="readPara(${i})">🔊 Read paragraph ${i+1}</button></div></div>`;
+  });
+  return h + `</div>`;
+}
+function readPara(i){
+  const p = PASSAGE.paras[i];
+  speak([{text:(p.h ? p.h + ". " : "") + "Paragraph " + (i+1) + ". " + p.t, el:document.getElementById("para"+(i+1))}]);
+}
+function readPassage(){
+  const items = [{text:PASSAGE.title + "."}];
+  PASSAGE.paras.forEach((p,i) => items.push({text:(p.h ? p.h + ". " : "") + p.t, el:document.getElementById("para"+(i+1))}));
+  speak(items);
+}
+function gotoPara(n){
+  const pp = document.getElementById("pp"); if(pp) pp.classList.add("open");
+  const el = document.getElementById("para"+n); if(!el) return;
+  el.scrollIntoView({block:"center",behavior:"smooth"});
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+}
+
+/* ===================== SCREENS ===================== */
+function render(){
+  stopSpeech();
+  if(!state) return renderStart();
+  if(state.stage === "directions") return renderDirections();
+  if(state.stage === "read") return renderRead();
+  if(state.stage === "quiz") return renderQuiz();
+  return renderResults();
+}
+
+function renderStart(){
+  const last = lastName();
+  app.innerHTML = `<div class="card center">
+    <div style="font-size:3rem">🐢🌊</div>
+    <h2>Welcome, reader!</h2>
+    <p>Type your name to begin. Your work saves automatically on this device.</p>
+    <div class="row"><input type="text" id="nm" placeholder="First name and last initial" value="${esc(last)}" autocomplete="off">
+    <button class="big" onclick="startWith()">Start ➜</button></div>
+    <p class="muted" style="font-size:.9rem;margin-top:14px">⏱ About 30 minutes · 1 passage · 20 questions · one try per question</p>
+    <button class="speak" onclick="speak([{text:'Welcome, reader! Type your name in the box, then press Start.'}])">🔊 Read to me</button>
+  </div>`;
+  const nm = document.getElementById("nm");
+  nm.addEventListener("keydown", e => { if(e.key === "Enter") startWith(); });
+}
+function startWith(){
+  const n = document.getElementById("nm").value.trim();
+  if(n.length < 2){ speak([{text:"Please type your name first."}]); document.getElementById("nm").focus(); return; }
+  state = loadFor(n) || fresh(n);
+  save(); render();
+}
+
+const DIRECTIONS = [
+  "Today you will practice finding the central idea of a text and the details that support it.",
+  "First, read the article Lights Out for Hatchlings. Press any speaker button to hear the text read aloud.",
+  "Next, answer 20 questions about the article. You can look back at the article while you answer.",
+  "You get one try for each question. Think carefully, then press Lock In Answer.",
+  "Some questions ask you to choose two or three answers. Read each question carefully.",
+  "Work on your own. This should take about 30 minutes. You can do it!"
+];
+const REMINDER = "Remember: The central idea is the most important point the author wants you to understand. Supporting details are the facts, examples, and explanations that prove the central idea. Small, interesting details are not always important.";
+function renderDirections(){
+  app.innerHTML = `<div class="card center">
+    <div class="row" style="justify-content:space-between"><h2>Directions</h2>
+    <button class="speak" onclick="speak([{text:'Directions. ' + DIRECTIONS.join(' ') + ' ' + REMINDER}])">🔊 Read directions</button></div>
+    <p>Hi, <strong>${esc(state.name)}</strong>!</p>
+    <ol class="steps">${DIRECTIONS.map(d => `<li>${esc(d)}</li>`).join("")}</ol>
+    <div class="tip"><strong>💡 Remember:</strong> The <strong>central idea</strong> is the most important point the author wants you to understand. <strong>Supporting details</strong> are the facts, examples, and explanations that prove it. Small, interesting details are not always important.</div>
+    <button class="big sun" onclick="state.stage='read';save();render();window.scrollTo(0,0)">I'm ready to read ➜</button>
+  </div>`;
+}
+
+function renderRead(){
+  app.innerHTML = `<div class="card center" style="max-width:860px">
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <h3 style="margin:0">Step 1: Read the article</h3>
+      <button class="speak" onclick="readPassage()">🔊 Read the whole article</button>
+    </div>
+    <p class="muted" style="margin-top:0;font-size:.95rem">As you read, ask yourself: <em>What is the most important point the author wants me to understand?</em></p>
+    ${passageHTML()}
+    <div style="text-align:center;margin-top:20px">
+      <button class="big" onclick="state.stage='quiz';save();render();window.scrollTo(0,0)">I'm done reading. Start the questions ➜</button>
+    </div>
+  </div>`;
+}
+
+function renderQuiz(){
+  const i = state.idx, q = Q[i], done = state.answers[i], multi = !!q.n;
+  const sel = done ? done.sel : (state.pending[i] || []);
+  const right = correctArr(q);
+  const pct = answered() / Q.length;
+  let choices = q.c.map((c,j) => {
+    let cls = "choice" + (multi ? " multi" : "");
+    if(done){ if(right.includes(j)) cls += " isright"; else if(sel.includes(j)) cls += " iswrong"; }
+    else if(sel.includes(j)) cls += " sel";
+    return `<button class="${cls}" ${done ? "disabled" : ""} onclick="choose(${j})" aria-pressed="${sel.includes(j)}">
+      <span class="let">${L[j]}</span><span>${esc(c)}</span></button>`;
+  }).join("");
+  const dots = Q.map((_,k) => {
+    const a = state.answers[k]; let c = "dot"; if(a) c += a.ok ? " right" : " wrong"; if(k === i) c += " cur";
+    return `<button class="${c}" onclick="jump(${k})" aria-label="Question ${k+1}">${k+1}</button>`;
+  }).join("");
+  const looks = (q.p || []).map(n => `<button class="ghost" style="padding:4px 10px;font-size:.85rem" onclick="gotoPara(${n})">📖 Paragraph ${n}</button>`).join(" ");
+  const partA = q.link !== undefined ? `<div class="parta"><strong>Part A was:</strong> ${esc(Q[q.link].q)}</div>` : "";
+  let fb = "";
+  if(done){
+    fb = `<div class="fb ${done.ok ? "good" : "bad"}"><strong>${done.ok ? "✅ Correct!" : "❌ Not quite."}</strong>
+      ${done.ok ? "" : `<div>The correct answer: <strong>${right.map(x => L[x]).join(" and ")}</strong></div>`}
+      <div>${esc(q.ex)}</div>
+      <button class="speak sm" style="margin-top:6px" onclick="speak([{text:'${done.ok ? "Correct!" : "Not quite. The correct answer is " + right.map(x => L[x]).join(" and ") + "."} ' + Q[${i}].ex}])">🔊 Read explanation</button></div>`;
+  }
+  const isLast = i === Q.length - 1;
+  app.innerHTML = `<div class="quizwrap">
+    <aside class="card ppanel" id="pp">
+      <div class="tools">
+        <button class="speak" onclick="readPassage()">🔊 Read article</button>
+        <button class="ghost closep" onclick="document.getElementById('pp').classList.remove('open');stopSpeech()">✕ Close</button>
+      </div>
+      ${passageHTML()}
+    </aside>
+    <section class="card">
+      <div class="beach" aria-hidden="true"><div class="wave">🌊</div><div class="turtle" style="left:${6 + pct*74}%">🐢</div></div>
+      <div class="dots">${dots}</div>
+      <div class="qhead">
+        <div class="qnum">${numLabel(i)}${q.part ? `<span class="part">Part ${q.part}</span>` : ""}</div>
+        <span class="score">⭐ ${score()} correct</span>
+      </div>
+      <div class="row" style="margin-bottom:6px">
+        <button class="speak" onclick="readQ()">🔊 Read question &amp; answers</button>
+        <button class="ghost togglep" style="padding:4px 10px;font-size:.85rem" onclick="document.getElementById('pp').classList.add('open')">📖 Show article</button>
+        ${looks}
+      </div>
+      ${partA}
+      <p class="stem">${esc(q.q)}</p>
+      ${q.quote ? `<div class="quote">“${esc(q.quote)}”</div>` : ""}
+      ${multi ? `<span class="choose">Choose ${q.n === 2 ? "TWO" : "THREE"} answers.</span>` : ""}
+      <div class="choices">${choices}</div>
+      ${done ? "" : `<button class="big coral" id="lockBtn" onclick="lockIn()" ${sel.length === (q.n || 1) ? "" : "disabled"}>🔒 Lock In Answer</button>
+        <div class="muted" style="font-size:.85rem;margin-top:6px">${multi ? `Pick ${q.n} answers, then lock in.` : "Pick one answer, then lock in."} You only get one try.</div>`}
+      ${fb}
+      <div class="nav">
+        <button class="ghost" onclick="jump(${i-1})" ${i === 0 ? "disabled style='opacity:.4'" : ""}>⬅ Back</button>
+        ${done ? (isLast || answered() === Q.length
+          ? (answered() === Q.length ? `<button class="big sun" onclick="finish()">See my results 🎉</button>` : `<button class="big" onclick="jump(firstOpen())">Go to unanswered ➜</button>`)
+          : `<button class="big" onclick="jump(${i+1})">Next question ➜</button>`) : ""}
+      </div>
+    </section>
+  </div>`;
+}
+function readQ(){
+  const i = state.idx, q = Q[i];
+  let t = "Question " + (i+1) + ". " + (q.part ? "Part " + q.part + ". " : "");
+  if(q.link !== undefined) t += "This goes with Part A. ";
+  t += q.q + " ";
+  if(q.quote) t += "Here is the detail. " + q.quote + " ";
+  if(q.n) t += "Choose " + (q.n === 2 ? "two" : "three") + " answers. ";
+  q.c.forEach((c,j) => t += " Choice " + L[j] + ". " + c + (/[.!?"]$/.test(c) ? " " : ". "));
+  speak([{text:t}]);
+}
+function choose(j){
+  const i = state.idx, q = Q[i]; if(state.answers[i]) return;
+  let sel = state.pending[i] ? [...state.pending[i]] : [];
+  if(q.n){ if(sel.includes(j)) sel = sel.filter(x => x !== j); else if(sel.length < q.n) sel.push(j); else { sel.shift(); sel.push(j); } }
+  else sel = [j];
+  state.pending[i] = sel; save();
+  const y = window.scrollY; renderQuizKeep(); window.scrollTo(0,y);
+}
+function renderQuizKeep(){ const pp = document.getElementById("pp"); const st = pp ? pp.scrollTop : 0; const open = pp && pp.classList.contains("open"); renderQuiz(); const n = document.getElementById("pp"); if(n){ n.scrollTop = st; if(open) n.classList.add("open"); } }
+function lockIn(){
+  const i = state.idx, q = Q[i], sel = state.pending[i] || [];
+  if(sel.length !== (q.n || 1) || state.answers[i]) return;
+  const ok = sameSet(sel, correctArr(q));
+  state.answers[i] = {sel, ok}; delete state.pending[i]; save();
+  stopSpeech();
+  if(ok) showPop(["+1 ⭐","Nice! 🐢","Great job!","You got it!"][Math.floor(Math.random()*4)]);
+  const y = window.scrollY; renderQuizKeep(); window.scrollTo(0,y);
+}
+function showPop(t){ const d = document.createElement("div"); d.className = "pop"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 1200); }
+function jump(k){ if(k < 0 || k >= Q.length) return; state.idx = k; save(); render(); window.scrollTo(0,0); }
+function firstOpen(){ for(let k = 0; k < Q.length; k++) if(!state.answers[k]) return k; return 0; }
+function finish(){ state.stage = "results"; state.finished = state.finished || Date.now(); save(); render(); window.scrollTo(0,0); }
+
+function renderResults(){
+  const s = score(), n = Q.length, pct = Math.round(s/n*100);
+  const missed = Q.map((_,k) => k).filter(k => state.answers[k] && !state.answers[k].ok).map(k => k+1);
+  let badge = "🌟", title = "Keep Exploring!", msg = "You finished! Look back at the questions you missed and the explanations to keep growing.";
+  if(pct >= 90){ badge = "🏆"; title = "Central Idea Champion!"; msg = "Amazing work! You found the central idea and the strongest details like a pro."; }
+  else if(pct >= 70){ badge = "🐢"; title = "Detail Detective!"; msg = "Great job! You are getting really good at finding central ideas and supporting details."; }
+  else if(pct >= 50){ badge = "🌊"; title = "Making Waves!"; msg = "Good effort! Review the questions you missed to make your skills even stronger."; }
+  const stars = "⭐".repeat(Math.max(1, Math.round(pct/20))) ;
+  const mins = state.finished && state.started ? Math.max(1, Math.round((state.finished - state.started)/60000)) : null;
+  const when = new Date(state.finished || Date.now()).toLocaleString();
+  const review = Q.map((q,k) => {
+    const a = state.answers[k]; const ok = a && a.ok;
+    return `<div class="ritem ${ok ? "r" : "w"}"><strong>${k+1}${q.part ? " (Part " + q.part + ")" : ""}.</strong> ${ok ? "✅" : "❌"} ${esc(q.q)}
+      ${ok ? "" : `<div class="muted" style="font-size:.88rem">Correct: ${correctArr(q).map(x => L[x]).join(" and ")} · You chose: ${a ? a.sel.map(x => L[x]).join(" and ") : "—"}</div>`}</div>`;
+  }).join("");
+  app.innerHTML = `<div class="card center" style="text-align:center">
+    <div class="badge">${badge}</div>
+    <h2>${title}</h2>
+    <div class="bigscore">${s} / ${n}</div>
+    <div class="stars">${stars}</div>
+    <p style="font-size:1.1rem"><strong>${pct}%</strong> · ${esc(state.name)} · ${esc(when)}${mins ? " · " + mins + " min" : ""}</p>
+    <p>${msg}</p>
+    <div class="tip" style="text-align:left"><strong>👩‍🏫 Show your teacher this screen.</strong><br>
+      Standard: ELA.6.R.2.2 Central Idea<br>Score: ${s}/${n} (${pct}%)<br>
+      Missed: ${missed.length ? missed.join(", ") : "None! 🎉"}</div>
+    <div class="row" style="justify-content:center">
+      <button class="speak" onclick="speak([{text:'${title.replace(/'/g,"")} You got ${s} out of ${n} correct. ${msg.replace(/'/g,"")} Show your teacher this screen.'}])">🔊 Read my results</button>
+      <button class="ghost" onclick="copyResults()">📋 Copy my results</button>
+    </div>
+    <h3 style="margin-top:22px;text-align:left">Review</h3>
+    <div class="review" style="text-align:left">${review}</div>
+  </div>`;
+  if(pct >= 50) confetti();
+}
+function copyResults(){
+  const s = score(), missed = Q.map((_,k)=>k).filter(k=>state.answers[k] && !state.answers[k].ok).map(k=>k+1);
+  const t = `${state.name} | ELA.6.R.2.2 Central Idea | ${s}/${Q.length} (${Math.round(s/Q.length*100)}%) | Missed: ${missed.join(", ") || "none"}`;
+  try{ navigator.clipboard.writeText(t).then(() => showPop("Copied! 📋")); }catch(e){ prompt("Copy your results:", t); }
+}
+
+/* ===================== CONFETTI ===================== */
+function confetti(){
+  const cv = document.getElementById("confetti"), ctx = cv.getContext("2d");
+  cv.width = innerWidth; cv.height = innerHeight;
+  const colors = ["#ffb703","#2ec4b6","#fb6f5f","#0e7c9b","#8ac926"];
+  const ps = Array.from({length:160}, () => ({x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5, r:5+Math.random()*6, c:colors[Math.floor(Math.random()*5)], vy:2+Math.random()*3, vx:-1.5+Math.random()*3, a:Math.random()*6}));
+  let f = 0;
+  (function tick(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p => { p.y += p.vy; p.x += p.vx; p.a += .1; ctx.fillStyle = p.c; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6); ctx.restore(); });
+    if(++f < 260) requestAnimationFrame(tick); else ctx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+
+/* ===================== TEACHER ===================== */
+function teacherReset(){
+  const pin = prompt("Teacher PIN:");
+  if(pin === null) return;
+  if(pin !== TEACHER_PIN){ alert("Incorrect PIN."); return; }
+  const who = prompt("Type the student's name to reset (or type ALL to reset every student on this device):", state ? state.name : "");
+  if(!who) return;
+  try{
+    if(who.trim().toUpperCase() === "ALL"){ Object.keys(localStorage).filter(k => k.startsWith(STORE)).forEach(k => localStorage.removeItem(k)); }
+    else localStorage.removeItem(skey(who));
+  }catch(e){}
+  state = null; render();
+}
+
+/* ===================== BOOT ===================== */
+(function boot(){
+  const n = lastName();
+  if(n){ const s = loadFor(n); if(s && s.stage !== "results"){ state = s; } }
+  render();
+})();
+</script>
+</body>
+</html>
